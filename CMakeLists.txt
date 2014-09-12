@@ -208,6 +208,11 @@ if(${PROTOCOL_KAKU_CONTACT} MATCHES "OFF")
   list(REMOVE_ITEM protocol "${PROJECT_SOURCE_DIR}/libs/protocols/arctech_contact.c")
 endif()
 
+if(${PROTOCOL_MOTION_SENSOR} MATCHES "OFF")
+  list(REMOVE_ITEM protocol_headers "${PROJECT_SOURCE_DIR}/libs/protocols/motion_sensor.h")
+  list(REMOVE_ITEM protocol "${PROJECT_SOURCE_DIR}/libs/protocols/motion_sensor.c")
+endif(
+
 if(${PROTOCOL_COCO_SWITCH} MATCHES "OFF"
 	AND ${PROTOCOL_DIO_SWITCH} MATCHES "OFF"
 	AND ${PROTOCOL_NEXA_SWITCH} MATCHES "OFF"
@@ -675,6 +680,12 @@ if(${MODULESPACK} MATCHES "OFF")
 	target_link_libraries(pilight-flash m)
 	target_link_libraries(pilight-flash ${CMAKE_THREAD_LIBS_INIT})
 
+	add_executable(pilight-handler handler.c)
+	target_link_libraries(pilight-handler pilight_shared)
+	target_link_libraries(pilight-handler ${CMAKE_DL_LIBS})
+	target_link_libraries(pilight-handler m)
+	target_link_libraries(pilight-handler ${CMAKE_THREAD_LIBS_INIT})
+
 	if(EXISTS "/usr/local/sbin/pilight-send")
 		install(CODE "execute_process(COMMAND rm /usr/local/sbin/pilight-send)")
 	endif()
@@ -699,6 +710,7 @@ if(${MODULESPACK} MATCHES "OFF")
 	install(PROGRAMS pilight-receive DESTINATION bin COMPONENT pilight)
 	install(PROGRAMS pilight-debug DESTINATION sbin COMPONENT pilight)
 	install(PROGRAMS pilight-flash DESTINATION sbin COMPONENT pilight)
+	install(PROGRAMS pilight-handler DESTINATION sbin COMPONENT pilight)	
 	install(PROGRAMS pilight-uuid DESTINATION bin COMPONENT pilight)
 	install(CODE "execute_process(COMMAND update-rc.d pilight defaults)")
 	install(CODE "execute_process(COMMAND ldconfig)")

@@ -16,6 +16,7 @@
     along with pilight. If not, see	<http://www.gnu.org/licenses/>
 */
 
+// seconds-brooadcasts option added: value 0 disables cpu ram tests, value > 0 = number of seconds that test results are broadcasted default 3 seconds 17-08-2014 bennybap
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -195,6 +196,8 @@ static int maxrawlen = 0;
 /* Do we need to connect to a master server:port? */
 static char *master_server = NULL;
 static unsigned short master_port = 0;
+/* number of seconds between broadcast for cpu/ram check, zero value gives no cpu/ram check */
+static int seconds_broadcasts = 3;
 
 #ifdef WEBSERVER
 /* Do we enable the webserver */
@@ -1957,6 +1960,8 @@ int main(int argc, char **argv) {
 		goto clear;
 	}
 
+	settings_find_number("seconds-brooadcasts", &seconds_broadcasts);
+
 	/* Initialize peripheral modules */
 	hardware_init();
 	/* Initialize protocols */
@@ -2129,6 +2134,7 @@ int main(int argc, char **argv) {
 	int i = -1;
 	int x = 0;
 	while(main_loop) {
+              if (seconds_broadcast > 0) {
 		double cpu = 0.0, ram = 0.0;
 		cpu = getCPUUsage();
 		ram = getRAMUsage();
@@ -2193,7 +2199,7 @@ int main(int argc, char **argv) {
 		} else {
 			checkcpu = 0;
 			checkram = 0;
-			if((i > 0 && i%3 == 0) || (i == -1)) {
+			if((i > 0 && ((i % seconds_broadcasts) == 0)) || (i == -1)) {
 				procProtocol->message = json_mkobject();
 				JsonNode *code = json_mkobject();
 				json_append_member(code, "cpu", json_mknumber(cpu));
@@ -2211,6 +2217,7 @@ int main(int argc, char **argv) {
 			}
 			i++;
 		}
+	   }
 		sleep(1);
 	}
 
