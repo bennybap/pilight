@@ -23,6 +23,9 @@
 #include "ssdp.h"
 #include "gc.h"
 
+static int main_loop = 1;
+static int sockfd = 0;
+
 typedef enum {
 	WELCOME,
 	IDENTIFY,
@@ -164,7 +167,6 @@ int main(int argc, char **argv) {
 	char *server = NULL;
 	unsigned short port = 0;
 
-   int sockfd = 0;
    char *recvBuff = NULL;
 	char *message = NULL;
 	char *args = NULL;
@@ -238,8 +240,8 @@ int main(int argc, char **argv) {
 	if(server) {
 		sfree((void *)&server);
 	}
-
-	while(1) {
+	
+	while(main_loop) {
 		if(steps > WELCOME) {
 			if((recvBuff = socket_read(sockfd)) == NULL) {
 				goto close;
