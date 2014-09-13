@@ -2134,7 +2134,7 @@ int main(int argc, char **argv) {
 	int i = -1;
 	int x = 0;
 	while(main_loop) {
-              if (seconds_broadcast > 0) {
+              if (seconds_broadcasts > 0) {
 		double cpu = 0.0, ram = 0.0;
 		cpu = getCPUUsage();
 		ram = getRAMUsage();
