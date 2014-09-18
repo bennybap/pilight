@@ -92,6 +92,8 @@ const char werkkamer[] = "Werkkamer";
 const char werkkamerlicht[] = "Werkkamerlicht";
 const char werkkamerlicht2[] = "Bureaulamp";
 const char werkkamerdeur[] = "Werkkamerdeur";
+const char statebeweging[] = "motion";
+const char stategeenbeweging[] = "  none";
 const char bewegingsensor1[] = "bewegingsensor 1";
 const char bewegingsensor2[] = "bewegingsensor 2";
 
