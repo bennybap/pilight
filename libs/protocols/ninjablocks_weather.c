@@ -85,7 +85,8 @@ static void ninjablocksWeatherParseCode(void) {
 	int dataSync = binToDecRev(ninjablocks_weather->binary, 10,12);
 	int humidity = binToDecRev(ninjablocks_weather->binary, 13,19);	// %
 	int temperature = binToDecRev(ninjablocks_weather->binary, 20,34);
-	temperature *= (100 / 128) - 5000;			// temp=(temp+50)*128 °C, 2 digits
+//	((temp * (100 / 128)) - 5000) * 10 °C, 2 digits
+	temperature = ((int)((double)(temperature * 0.78125)) - 5000);
 //	int parity = binToDecRev(ninjablocks_weather->binary, 35,35);
 
 	struct ninjablocks_weather_settings_t *tmp = ninjablocks_weather_settings;

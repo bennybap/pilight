@@ -72,7 +72,9 @@ void arctechContactInit(void) {
 	arctech_contact->devtype = SWITCH;
 	arctech_contact->hwtype = RF433;
 	arctech_contact->pulse = 4;
-	arctech_contact->rawlen = 148;
+	arctech_contact->rawlen = 140;
+	arctech_contact->minrawlen = 132;
+	arctech_contact->maxrawlen = 148;
 	arctech_contact->lsb = 3;
 
 	options_add(&arctech_contact->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");
@@ -89,7 +91,7 @@ void arctechContactInit(void) {
 #ifdef MODULE
 void compatibility(struct module_t *module) {
 	module->name = "arctech_contact";
-	module->version = "1.0";
+	module->version = "1.1";
 	module->reqversion = "5.0";
 	module->reqcommit = NULL;
 }
