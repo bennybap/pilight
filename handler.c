@@ -287,7 +287,8 @@ int main(int argc, char **argv) {
 					char *uid = NULL;
 					char *origin = NULL;
 					char *protocol = NULL;
-					struct timeval tp;	
+					struct timeval tp;
+					struct tm *tm;							
 					int index1; 
 					double itmp = 0;		
 											
@@ -312,15 +313,22 @@ int main(int argc, char **argv) {
 										repeats = (int)round(itmp);										
 									}
 									json_find_string(json, "protocol", &protocol);	
-									gettimeofday(&tp, NULL);	
+
 									for (index1 = 0; index1 < MAXKAKUDEVS; index1++)
 									{
 										if (table[index1].id == id && 	table[index1].unit == unit) {
+											gettimeofday(&tp, NULL);												
 											break;
 										}
 									}
 									if (index1 <	MAXKAKUDEVS) { // found
-										printf("%s in %s %s\n", table[index1].name, table[index1].location, state);
+										printf("%s in %s %s ", table[index1].name, table[index1].location, state);
+										if((tm = localtime(&tp.tv_sec)) != NULL) {
+											printf("at %d-%02d-%02d %d:%02d:%02d\n", (tm->tm_year + 1900), tm->tm_mon, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);											
+										}
+										else {
+											printf("\n");	
+										}										
 									}
 								}	
 							}	
