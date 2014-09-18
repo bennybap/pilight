@@ -3,6 +3,7 @@
 
 	Pilight handler handler.c
    modified: 12-08-2014 BAP 
+   modified: 14-09-2014 BAP motionsensors added  
 */
 
 #include <stdio.h>
@@ -91,8 +92,10 @@ const char werkkamer[] = "Werkkamer";
 const char werkkamerlicht[] = "Werkkamerlicht";
 const char werkkamerlicht2[] = "Bureaulamp";
 const char werkkamerdeur[] = "Werkkamerdeur";
+const char bewegingsensor1[] = "bewegingsensor 1";
+const char bewegingsensor2[] = "bewegingsensor 2";
 
-#define MAXKAKUDEVS	34
+#define MAXKAKUDEVS	36
 
 const struct devtranslate table[MAXKAKUDEVS] = {																// index1
 	{ 12564786, 9, stateopendeur, statecloseddeur, bijkeuken, tuindeur },            //  00
@@ -125,10 +128,12 @@ const struct devtranslate table[MAXKAKUDEVS] = {																// index1
 	{ 10706734, 9, statelichtaan, statelichtuit, studeerkamer, studeerkamerlicht },	//  27	
 	{ 8619562, 9, stateopendeur, statecloseddeur, studeerkamer, studeerkamerdeur },	//  28			
 	{ 10122818, 9, statelichtaan, statelichtuit, zolder, zolderlicht },					//  29
-	{ 10710574, 9, statelichtaan, statelichtuit, overloop, zolderlicht },				//  30
-	{ 10709846, 9, statelichtaan, statelichtuit, werkkamer, werkkamerlicht },			//  31
-	{ 3819430, 0, statelichtaan, statelichtuit, werkkamer, werkkamerlicht2 },			//  32
-	{ 620048, 9, stateopendeur, statecloseddeur, werkkamer, werkkamerdeur }				//  33
+	{ 9541494, 9, statebeweging, stategeenbeweging, zolder, bewegingsensor2 },       //  30		
+	{ 10710574, 9, statelichtaan, statelichtuit, overloop, zolderlicht },				//  31
+	{ 10709846, 9, statelichtaan, statelichtuit, werkkamer, werkkamerlicht },			//  32
+	{ 3819430, 0, statelichtaan, statelichtuit, werkkamer, werkkamerlicht2 },			//  33
+	{ 620048, 9, stateopendeur, statecloseddeur, werkkamer, werkkamerdeur },			//  34
+	{ 9943962, 9, statebeweging, stategeenbeweging, werkkamer, bewegingsensor1 }     //	 35	
 };
 
 
@@ -314,12 +319,7 @@ int main(int argc, char **argv) {
 									}
 									if (index1 <	MAXKAKUDEVS) { // found
 										printf("%s in %s %s\n", table[index1].name, table[index1].location, state);
-									}						
-									printf("ID %d Unit %d State %s Repeats %d Origin %s Protocol %s", id, unit, state, repeats, origin, protocol);	
-									if (uid != NULL) {
-										printf(" UUID %s", uid);
 									}
-									printf("\n");
 								}	
 							}	
 						}
