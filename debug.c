@@ -77,7 +77,6 @@ int main_gc(void) {
 	log_gc();
 
 	sfree((void *)&progname);
-
 	return EXIT_SUCCESS;
 }
 
@@ -108,7 +107,6 @@ void *receive_code(void *param) {
 		memset(&pRaw, '\0', 255);
 		memset(&code, '\0', 255);
 		memset(&binary, '\0', 255);
-		memset(&bit, '\0', 255);
 		recording = 1;
 		bit = 0;
 		footer = 0;
@@ -223,7 +221,9 @@ void *receive_code(void *param) {
 			printf("\n");
 		}
 	}
+
 	main_loop = 0;
+
 	return NULL;
 }
 
