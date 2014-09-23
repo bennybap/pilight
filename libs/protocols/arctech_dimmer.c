@@ -52,12 +52,12 @@ static void arctechDimCreateMessage(int id, int unit, int state, int all, int di
 
 static void arctechDimParseBinary(void) {
 	int dimlevel = binToDecRev(arctech_dimmer->binary, 32, 35);
-	int unit = binToDecRev(arctech_dimmer->binary, 28, 31);
-	int state = arctech_dimmer->binary[27];
-	int all = arctech_dimmer->binary[26];
-	int id = binToDecRev(arctech_dimmer->binary, 0, 25);
+	arctech_dimmer->UNIT = binToDecRev(arctech_dimmer->binary, 28, 31);
+	arctech_dimmer->STATE = arctech_dimmer->binary[27];
+	arctech_dimmer->ALL = arctech_dimmer->binary[26];
+	arctech_dimmer->ID = binToDecRev(arctech_dimmer->binary, 0, 25);
 
-	arctechDimCreateMessage(id, unit, state, all, dimlevel);
+	arctechDimCreateMessage(arctech_dimmer->ID, arctech_dimmer->UNIT, arctech_dimmer->STATE, arctech_dimmer->ALL, dimlevel);
 }
 
 static void arctechDimCreateLow(int s, int e) {

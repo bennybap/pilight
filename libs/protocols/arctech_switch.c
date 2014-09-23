@@ -48,12 +48,12 @@ static void arctechSwCreateMessage(int id, int unit, int state, int all) {
 }
 
 static void arctechSwParseBinary(void) {
-	int unit = binToDecRev(arctech_switch->binary, 28, 31);
-	int state = arctech_switch->binary[27];
-	int all = arctech_switch->binary[26];
-	int id = binToDecRev(arctech_switch->binary, 0, 25);
+	arctech_switch->UNIT = binToDecRev(arctech_switch->binary, 28, 31);
+	arctech_switch->STATE = arctech_switch->binary[27];
+	arctech_switch->ALL = arctech_switch->binary[26];
+	arctech_switch->ID = binToDecRev(arctech_switch->binary, 0, 25);
 
-	arctechSwCreateMessage(id, unit, state, all);
+	arctechSwCreateMessage(arctech_switch->ID, arctech_switch->UNIT, arctech_switch->STATE, arctech_switch->ALL);
 }
 
 static void arctechSwCreateLow(int s, int e) {

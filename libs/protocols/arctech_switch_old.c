@@ -42,10 +42,10 @@ static void arctechSwOldCreateMessage(int id, int unit, int state) {
 }
 
 static void arctechSwOldParseBinary(void) {
-	int unit = binToDec(arctech_switch_old->binary, 0, 3);
-	int state = arctech_switch_old->binary[11];
-	int id = binToDec(arctech_switch_old->binary, 4, 8);
-	arctechSwOldCreateMessage(id, unit, state);
+	arctech_switch_old->UNIT = binToDec(arctech_switch_old->binary, 0, 3);
+	arctech_switch_old->STATE = arctech_switch_old->binary[11];
+	arctech_switch_old->ID = binToDec(arctech_switch_old->binary, 4, 8);
+	arctechSwOldCreateMessage(arctech_switch_old->ID, arctech_switch_old->UNIT, arctech_switch_old->STATE);
 }
 
 static void arctechSwOldCreateLow(int s, int e) {

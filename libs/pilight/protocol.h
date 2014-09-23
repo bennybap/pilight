@@ -115,6 +115,11 @@ typedef struct protocols_t {
 
 struct protocols_t *protocols;
 
+#define ID		pcode[254]
+#define UNIT	code[254]
+#define STATE	raw[254]
+#define ALL		binary[127]
+
 void protocol_init(void);
 struct protocol_threads_t *protocol_thread_init(protocol_t *proto, struct JsonNode *param);
 int protocol_thread_wait(struct protocol_threads_t *node, int interval, int *nrloops);

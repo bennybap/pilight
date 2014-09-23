@@ -48,12 +48,12 @@ static void arctechContactCreateMessage(int id, int unit, int state, int all) {
 }
 
 static void arctechContactParseBinary(void) {
-	int unit = binToDecRev(arctech_contact->binary, 28, 31);
-	int state = arctech_contact->binary[27];
-	int all = arctech_contact->binary[26];
-	int id = binToDecRev(arctech_contact->binary, 0, 25);
+	arctech_contact->UNIT = binToDecRev(arctech_contact->binary, 28, 31);
+	arctech_contact->STATE = arctech_contact->binary[27];
+	arctech_contact->ALL = arctech_contact->binary[26];
+	arctech_contact->ID = binToDecRev(arctech_contact->binary, 0, 25);
 
-	arctechContactCreateMessage(id, unit, state, all);
+	arctechContactCreateMessage(arctech_contact->ID, arctech_contact->UNIT, arctech_contact->STATE, arctech_contact->ALL);
 }
 
 #ifndef MODULE

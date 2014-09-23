@@ -47,12 +47,12 @@ static void arctechMotionCreateMessage(int id, int unit, int state, int all) {
 }
 
 static void arctechMotionParseBinary(void) {
-	int unit = binToDecRev(arctech_motion->binary, 28, 31);
-	int state = arctech_motion->binary[27];
-	int all = arctech_motion->binary[26];
-	int id = binToDecRev(arctech_motion->binary, 0, 25);
+	arctech_motion->UNIT = binToDecRev(arctech_motion->binary, 28, 31);
+	arctech_motion->STATE = arctech_motion->binary[27];
+	arctech_motion->ALL = arctech_motion->binary[26];
+	arctech_motion->ID = binToDecRev(arctech_motion->binary, 0, 25);
 
-	arctechMotionCreateMessage(id, unit, state, all);
+	arctechMotionCreateMessage(arctech_motion->ID, arctech_motion->UNIT, arctech_motion->STATE, arctech_motion->ALL);
 }
 
 #ifndef MODULE
