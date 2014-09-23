@@ -78,7 +78,7 @@ int CheckProtocol(struct protocol_t *protocol)
 	
 	for (index = 0; index < MAXKAKUDEVS; index++) {
 		if ((protocol->ID == table[index].id) && (protocol->UNIT == table[index].unit)) {
-			if (strcmp(protocol->id, table[index].protocol) == 0) {
+			if (strcmp(protocol->id, table[index].protname) == 0) {
 				error = 0;	
 			}
 			break;
@@ -88,5 +88,5 @@ int CheckProtocol(struct protocol_t *protocol)
 		json_delete(protocol->message);
 		protocol->message = NULL;
 	}
-	return(error)
+	return(error);
 }

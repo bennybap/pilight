@@ -115,7 +115,7 @@ typedef struct protocols_t {
 
 struct protocols_t *protocols;
 
-#define ID		pcode[254]
+#define ID		pCode[254]
 #define UNIT	code[254]
 #define STATE	raw[254]
 #define ALL		binary[127]
