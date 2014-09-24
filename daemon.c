@@ -54,7 +54,7 @@
 #include "firmware.h"
 #include "proc.h"
 
-#define PROT_CHECK
+//#define PROT_CHECK
 
 #ifdef UPDATE
 	#include "update.h"
