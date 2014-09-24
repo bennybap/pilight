@@ -51,8 +51,14 @@ static void motionSensorParseBinary(void) {
 	int state = motion_sensor->binary[27];
 	int all = motion_sensor->binary[26];
 	int id = binToDecRev(motion_sensor->binary, 0, 25);
-
-	motionSensorCreateMessage(id, unit, state, all);
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS || motion_sensor->idUnitnrs[counter]  != -1; counter += 2) {
+		if (motion_sensor->idUnitnrs[counter] == id && motion_sensor->idUnitnrs[counter + 1] == unit) {
+			motionSensorCreateMessage(id, unit, state, all);
+			return;	
+		}	
+	}
+	motion_sensor->message = NULL; // no registered id unit found
 }
 
 #ifndef MODULE
@@ -71,6 +77,15 @@ void motionSensorInit(void) {
 	motion_sensor->rawlen = 132;
 	motion_sensor->lsb = 3;
 
+	int counter;	
+	for (counter = 0; counter < MAX_ID_NRS; counter++) {
+		motion_sensor->idUnitnrs[counter]	= -1;		
+	}
+	motion_sensor->idUnitnrs[0] = 9943962;
+	motion_sensor->idUnitnrs[1] = 9;
+	motion_sensor->idUnitnrs[2] = 9541494;
+	motion_sensor->idUnitnrs[3] = 9;	
+	
 	options_add(&motion_sensor->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");
 	options_add(&motion_sensor->options, 'i', "id", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1,7}|[1-5][0-9]{7}|6([0-6][0-9]{6}|7(0[0-9]{5}|10([0-7][0-9]{3}|8([0-7][0-9]{2}|8([0-5][0-9]|6[0-3]))))))$");
 	options_add(&motion_sensor->options, 't', "motion", OPTION_NO_VALUE, CONFIG_STATE, JSON_STRING, NULL, NULL);

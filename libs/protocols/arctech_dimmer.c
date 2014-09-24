@@ -52,12 +52,18 @@ static void arctechDimCreateMessage(int id, int unit, int state, int all, int di
 
 static void arctechDimParseBinary(void) {
 	int dimlevel = binToDecRev(arctech_dimmer->binary, 32, 35);
-	arctech_dimmer->UNIT = binToDecRev(arctech_dimmer->binary, 28, 31);
-	arctech_dimmer->STATE = arctech_dimmer->binary[27];
-	arctech_dimmer->ALL = arctech_dimmer->binary[26];
-	arctech_dimmer->ID = binToDecRev(arctech_dimmer->binary, 0, 25);
-
-	arctechDimCreateMessage(arctech_dimmer->ID, arctech_dimmer->UNIT, arctech_dimmer->STATE, arctech_dimmer->ALL, dimlevel);
+	int unit = binToDecRev(arctech_dimmer->binary, 28, 31);
+	int state = arctech_dimmer->binary[27];
+	int all = arctech_dimmer->binary[26];
+	int id = binToDecRev(arctech_dimmer->binary, 0, 25);
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS || arctech_dimmer->idUnitnrs[counter]  != -1; counter += 2) {
+		if (arctech_dimmer->idUnitnrs[counter] == id && arctech_dimmer->idUnitnrs[counter + 1] == unit) {
+			arctechDimCreateMessage(id, unit, state, all, dimlevel);
+			return;	
+		}	
+	}
+	arctech_dimmer->message = NULL; // no registered id unit found
 }
 
 static void arctechDimCreateLow(int s, int e) {
@@ -268,7 +274,18 @@ void arctechDimInit(void) {
 	arctech_dimmer->pulse = 5;
 	arctech_dimmer->rawlen = 148;
 	arctech_dimmer->lsb = 3;
-
+	
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS; counter++) {
+		arctech_dimmer->idUnitnrs[counter]	= -1;		
+	}
+	arctech_dimmer->idUnitnrs[0] = 10971658;
+	arctech_dimmer->idUnitnrs[1] = 11;	
+	arctech_dimmer->idUnitnrs[2] = 9698734;
+	arctech_dimmer->idUnitnrs[3] = 9;		
+	arctech_dimmer->idUnitnrs[4] = 10122818;
+	arctech_dimmer->idUnitnrs[5] = 9;	
+		
 	options_add(&arctech_dimmer->options, 'd', "dimlevel", OPTION_HAS_VALUE, CONFIG_VALUE, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");
 	options_add(&arctech_dimmer->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");
 	options_add(&arctech_dimmer->options, 'i', "id", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1,7}|[1-5][0-9]{7}|6([0-6][0-9]{6}|7(0[0-9]{5}|10([0-7][0-9]{3}|8([0-7][0-9]{2}|8([0-5][0-9]|6[0-3]))))))$");

@@ -54,8 +54,6 @@
 #include "firmware.h"
 #include "proc.h"
 
-//#define PROT_CHECK
-
 #ifdef UPDATE
 	#include "update.h"
 #endif
@@ -216,10 +214,6 @@ static int webgui_tpl_free = 0;
 #ifdef UPDATE
 /* Do we need to check for updates */
 static int update_check = UPDATE_CHECK;
-#endif
-
-#ifdef PROT_CHECK
-#include "protcheck.c"
 #endif
 
 
@@ -591,15 +585,11 @@ void *receive_parse_code(void *param) {
 									logprintf(LOG_DEBUG, "called %s parseBinary()", protocol->id);
 
 									protocol->parseBinary();
-#ifdef PROT_CHECK
-									if (CheckProtocol(protocol)  == 0) { // device is present and protocol is correct
+									if (protocol->message) { // correct protocol found
 										receiver_create_message(protocol);	
 										pnode = NULL; // no new protocol to try
-										break;
+										break;										
 									}
-#else									
-									receiver_create_message(protocol);
-#endif									
 								}
 							}
 						}

@@ -48,19 +48,25 @@ static void arctechContactCreateMessage(int id, int unit, int state, int all) {
 }
 
 static void arctechContactParseBinary(void) {
-	arctech_contact->UNIT = binToDecRev(arctech_contact->binary, 28, 31);
-	arctech_contact->STATE = arctech_contact->binary[27];
-	arctech_contact->ALL = arctech_contact->binary[26];
-	arctech_contact->ID = binToDecRev(arctech_contact->binary, 0, 25);
-
-	arctechContactCreateMessage(arctech_contact->ID, arctech_contact->UNIT, arctech_contact->STATE, arctech_contact->ALL);
+	int unit = binToDecRev(arctech_contact->binary, 28, 31);
+	int state = arctech_contact->binary[27];
+	int all = arctech_contact->binary[26];
+	int id = binToDecRev(arctech_contact->binary, 0, 25);
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS || arctech_contact->idUnitnrs[counter]  != -1; counter += 2) {
+		if (arctech_contact->idUnitnrs[counter] == id && arctech_contact->idUnitnrs[counter + 1] == unit) {
+			arctechContactCreateMessage(id, unit, state, all);		
+			return;	
+		}	
+	}
+	arctech_contact->message = NULL; // no registered id unit found
 }
 
 #ifndef MODULE
 __attribute__((weak))
 #endif
 void arctechContactInit(void) {
-
+	
 	protocol_register(&arctech_contact);
 	protocol_set_id(arctech_contact, "arctech_contact");
 	protocol_device_add(arctech_contact, "kaku_contact", "KlikAanKlikUit Contact Sensor");
@@ -76,7 +82,34 @@ void arctechContactInit(void) {
 	arctech_contact->minrawlen = 132;
 	arctech_contact->maxrawlen = 148;
 	arctech_contact->lsb = 3;
-
+	
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS; counter++) {
+		arctech_contact->idUnitnrs[counter]	= -1;		
+	}
+	arctech_contact->idUnitnrs[0] = 12564786;	
+	arctech_contact->idUnitnrs[1] = 9;	
+	arctech_contact->idUnitnrs[2] = 12991322;
+	arctech_contact->idUnitnrs[3] = 9;		
+	arctech_contact->idUnitnrs[4] = 12564894;
+	arctech_contact->idUnitnrs[5] = 9;	
+	arctech_contact->idUnitnrs[6] = 12990902;
+	arctech_contact->idUnitnrs[7] = 9;	
+	arctech_contact->idUnitnrs[8] = 11081294;
+	arctech_contact->idUnitnrs[9] = 1;	
+	arctech_contact->idUnitnrs[10] = 12990958;
+	arctech_contact->idUnitnrs[11] = 9;	
+	arctech_contact->idUnitnrs[12] = 879672;
+	arctech_contact->idUnitnrs[13] = 9;	
+	arctech_contact->idUnitnrs[14] = 865344;
+	arctech_contact->idUnitnrs[15] = 9;		
+	arctech_contact->idUnitnrs[16] = 8619662;
+	arctech_contact->idUnitnrs[17] = 9;	
+	arctech_contact->idUnitnrs[18] = 8619562;
+	arctech_contact->idUnitnrs[19] = 9;	
+	arctech_contact->idUnitnrs[20] = 620048;
+	arctech_contact->idUnitnrs[21] = 9;				
+		
 	options_add(&arctech_contact->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");
 	options_add(&arctech_contact->options, 'i', "id", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1,7}|[1-5][0-9]{7}|6([0-6][0-9]{6}|7(0[0-9]{5}|10([0-7][0-9]{3}|8([0-7][0-9]{2}|8([0-5][0-9]|6[0-3]))))))$");
 	options_add(&arctech_contact->options, 't', "opened", OPTION_NO_VALUE, CONFIG_STATE, JSON_STRING, NULL, NULL);

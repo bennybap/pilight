@@ -48,12 +48,18 @@ static void arctechSwCreateMessage(int id, int unit, int state, int all) {
 }
 
 static void arctechSwParseBinary(void) {
-	arctech_switch->UNIT = binToDecRev(arctech_switch->binary, 28, 31);
-	arctech_switch->STATE = arctech_switch->binary[27];
-	arctech_switch->ALL = arctech_switch->binary[26];
-	arctech_switch->ID = binToDecRev(arctech_switch->binary, 0, 25);
-
-	arctechSwCreateMessage(arctech_switch->ID, arctech_switch->UNIT, arctech_switch->STATE, arctech_switch->ALL);
+	int unit = binToDecRev(arctech_switch->binary, 28, 31);
+	int state = arctech_switch->binary[27];
+	int all = arctech_switch->binary[26];
+	int id = binToDecRev(arctech_switch->binary, 0, 25);
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS || arctech_switch->idUnitnrs[counter]  != -1; counter += 2) {
+		if (arctech_switch->idUnitnrs[counter] == id && arctech_switch->idUnitnrs[counter + 1] == unit) {
+			arctechSwCreateMessage(id, unit, state, all);
+			return;	
+		}	
+	}
+	arctech_switch->message = NULL; // no registered id unit found
 }
 
 static void arctechSwCreateLow(int s, int e) {
@@ -202,6 +208,47 @@ void arctechSwInit(void) {
 	arctech_switch->pulse = 5;
 	arctech_switch->rawlen = 132;
 	arctech_switch->lsb = 3;
+	
+	int counter;	
+	for (counter = 0; counter < MAX_ID_NRS; counter++) {
+		arctech_switch->idUnitnrs[counter]	= -1;		
+	}
+	arctech_switch->idUnitnrs[0] = 9783342;
+	arctech_switch->idUnitnrs[1] = 10;	
+	arctech_switch->idUnitnrs[2] = 9783342;
+	arctech_switch->idUnitnrs[3] = 11;	
+	arctech_switch->idUnitnrs[4] = 10971658;
+	arctech_switch->idUnitnrs[5] = 10;	
+	arctech_switch->idUnitnrs[6] = 3801158;
+	arctech_switch->idUnitnrs[7] = 0;		
+	arctech_switch->idUnitnrs[8] = 11223898;
+	arctech_switch->idUnitnrs[9] = 9;	
+	arctech_switch->idUnitnrs[10] = 11461082;
+	arctech_switch->idUnitnrs[11] = 9;	
+	arctech_switch->idUnitnrs[12] = 9787534;
+	arctech_switch->idUnitnrs[13] = 11;	
+	arctech_switch->idUnitnrs[14] = 10711386;
+	arctech_switch->idUnitnrs[15] = 9;		
+	arctech_switch->idUnitnrs[16] = 11207438;
+	arctech_switch->idUnitnrs[17] = 9;	
+	arctech_switch->idUnitnrs[18] = 9787534;
+	arctech_switch->idUnitnrs[19] = 10;	
+	arctech_switch->idUnitnrs[20] = 10703366;
+	arctech_switch->idUnitnrs[21] = 9;	
+	arctech_switch->idUnitnrs[22] = 11225598;
+	arctech_switch->idUnitnrs[23] = 9;		
+	arctech_switch->idUnitnrs[24] = 11211686;
+	arctech_switch->idUnitnrs[25] = 9;	
+	arctech_switch->idUnitnrs[26] = 10706734;
+	arctech_switch->idUnitnrs[27] = 9;	
+	arctech_switch->idUnitnrs[28] = 3819430;
+	arctech_switch->idUnitnrs[29] = 0;	
+	arctech_switch->idUnitnrs[30] = 10709846;
+	arctech_switch->idUnitnrs[31] = 9;		
+	arctech_switch->idUnitnrs[32] = 10710574;
+	arctech_switch->idUnitnrs[33] = 9;	
+	
+				
 	options_add(&arctech_switch->options, 't', "on", OPTION_NO_VALUE, CONFIG_STATE, JSON_STRING, NULL, NULL);
 	options_add(&arctech_switch->options, 'f', "off", OPTION_NO_VALUE, CONFIG_STATE, JSON_STRING, NULL, NULL);
 	options_add(&arctech_switch->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");

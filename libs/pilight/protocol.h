@@ -43,6 +43,8 @@ typedef enum {
 	WEBCAM
 } devtype_t;
 
+#define MAX_ID_NRS	50
+
 typedef struct protocol_devices_t {
 	char *id;
 	char *desc;
@@ -90,6 +92,8 @@ typedef struct protocol_t {
 	int code[255];
 	int pCode[255];
 	int binary[128]; // Max. the half the raw length
+	
+	int idUnitnrs[MAX_ID_NRS]; // known id and unit numbers for this protocol max 25 devices
 
 	hwtype_t hwtype;
 	devtype_t devtype;
@@ -114,11 +118,6 @@ typedef struct protocols_t {
 } protocols_t;
 
 struct protocols_t *protocols;
-
-#define ID		pCode[254]
-#define UNIT	code[254]
-#define STATE	raw[254]
-#define ALL		binary[127]
 
 void protocol_init(void);
 struct protocol_threads_t *protocol_thread_init(protocol_t *proto, struct JsonNode *param);
