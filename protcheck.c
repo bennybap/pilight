@@ -74,11 +74,11 @@ const struct devtranslate table[MAXKAKUDEVS] = {	//	 index
 
 int CheckProtocol(struct protocol_t *protocol)
 {
-	int error = -1, index;
+	int error = -1, indexcount;
 	
-	for (index = 0; index < MAXKAKUDEVS; index++) {
-		if ((protocol->ID == table[index].id) && (protocol->UNIT == table[index].unit)) {
-			if (strcmp(protocol->id, table[index].protname) == 0) {
+	for (indexcount = 0; indexcount < MAXKAKUDEVS; indexcount++) {
+		if ((protocol->ID == table[indexcount].id) && (protocol->UNIT == table[indexcount].unit)) {
+			if (strcmp(protocol->id, table[indexcount].protname) == 0) {
 				error = 0;	
 			}
 			break;
