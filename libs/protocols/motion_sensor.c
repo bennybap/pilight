@@ -52,10 +52,13 @@ static void motionSensorParseBinary(void) {
 	int all = motion_sensor->binary[26];
 	int id = binToDecRev(motion_sensor->binary, 0, 25);
 	int counter;
-	for (counter = 0; counter < MAX_ID_NRS || motion_sensor->idUnitnrs[counter]  != -1; counter += 2) {
+	for (counter = 0; counter < MAX_ID_NRS; counter += 2) {
 		if (motion_sensor->idUnitnrs[counter] == id && motion_sensor->idUnitnrs[counter + 1] == unit) {
 			motionSensorCreateMessage(id, unit, state, all);
 			return;	
+		}
+		if (motion_sensor->idUnitnrs[counter]  == -1) {	// end of list reached
+			break;
 		}	
 	}
 	motion_sensor->message = NULL; // no registered id unit found

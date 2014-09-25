@@ -46,11 +46,14 @@ static void arctechSwOldParseBinary(void) {
 	int state = arctech_switch_old->binary[11];
 	int id = binToDec(arctech_switch_old->binary, 4, 8);
 	int counter;
-	for (counter = 0; counter < MAX_ID_NRS || arctech_switch_old->idUnitnrs[counter]  != -1; counter += 2) {
+	for (counter = 0; counter < MAX_ID_NRS; counter += 2) {
 		if (arctech_switch_old->idUnitnrs[counter] == id && arctech_switch_old->idUnitnrs[counter + 1] == unit) {
 			arctechSwOldCreateMessage(id, unit, state);
 			return;	
 		}	
+		if (arctech_switch_old->idUnitnrs[counter]  == -1) {	// end of list reached
+			break;
+		}
 	}
 	arctech_switch_old->message = NULL; // no registered id unit found	
 }

@@ -53,11 +53,14 @@ static void arctechContactParseBinary(void) {
 	int all = arctech_contact->binary[26];
 	int id = binToDecRev(arctech_contact->binary, 0, 25);
 	int counter;
-	for (counter = 0; counter < MAX_ID_NRS || arctech_contact->idUnitnrs[counter]  != -1; counter += 2) {
+	for (counter = 0; counter < MAX_ID_NRS; counter += 2) {
 		if (arctech_contact->idUnitnrs[counter] == id && arctech_contact->idUnitnrs[counter + 1] == unit) {
 			arctechContactCreateMessage(id, unit, state, all);		
 			return;	
-		}	
+		}
+		if (arctech_contact->idUnitnrs[counter]  == -1) {	// end of list reached
+			break;
+		}
 	}
 	arctech_contact->message = NULL; // no registered id unit found
 }

@@ -57,10 +57,13 @@ static void arctechDimParseBinary(void) {
 	int all = arctech_dimmer->binary[26];
 	int id = binToDecRev(arctech_dimmer->binary, 0, 25);
 	int counter;
-	for (counter = 0; counter < MAX_ID_NRS || arctech_dimmer->idUnitnrs[counter]  != -1; counter += 2) {
+	for (counter = 0; counter < MAX_ID_NRS; counter += 2) {
 		if (arctech_dimmer->idUnitnrs[counter] == id && arctech_dimmer->idUnitnrs[counter + 1] == unit) {
 			arctechDimCreateMessage(id, unit, state, all, dimlevel);
 			return;	
+		}
+		if (arctech_dimmer->idUnitnrs[counter]  == -1) {	// end of list reached
+			break;
 		}	
 	}
 	arctech_dimmer->message = NULL; // no registered id unit found
