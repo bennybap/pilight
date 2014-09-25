@@ -586,7 +586,13 @@ void *receive_parse_code(void *param) {
 
 									protocol->parseBinary();
 									if (protocol->message) { // correct protocol found
-										receiver_create_message(protocol);	
+										if (protocol->repeats <= (receive_repeat*protocol->rxrpt)) {
+											receiver_create_message(protocol);	
+										}
+										else {
+											json_delete(protocol->message);
+											protocol->message = NULL;											
+										}
 										pnode = NULL; // no new protocol to try
 										break;										
 									}
