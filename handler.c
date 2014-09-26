@@ -282,7 +282,7 @@ int main(int argc, char **argv) {
 				while(line) {
 					int id = -1;
 					int unit = -1;
-					int repeats = -1;
+//					int repeats = -1;
 					struct JsonNode *code;
 					char *state = NULL;
 					char *uid = NULL;
@@ -307,11 +307,11 @@ int main(int argc, char **argv) {
 									if (strcmp(origin, "sender") == 0)
 									{
 										json_find_number(json, "repeat", &itmp);
-										repeats = (int)round(itmp);
+//										repeats = (int)round(itmp);
 									}	
 									else {
 										json_find_number(json, "repeats", &itmp);	
-										repeats = (int)round(itmp);										
+//										repeats = (int)round(itmp);										
 									}
 									json_find_string(json, "protocol", &protocol);	
 
