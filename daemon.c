@@ -475,6 +475,9 @@ static void receiver_create_message(protocol_t *protocol) {
 	}
 }
 
+
+#define USEC_DELAY_BETWEEN_REPEATS	750000 // 750000 usec was 500000
+
 void *receive_parse_code(void *param) {
 
 	pthread_mutex_lock(&recvqueue_lock);
@@ -531,11 +534,11 @@ void *receive_parse_code(void *param) {
 								protocol->code[x] = 0;
 							}
 							/* Check if the current code matches the previous one */
-							// if(protocol->pCode[x] != protocol->code[x]) {
-								// protocol->repeats = 0;
-								// protocol->first = 0;
-								// protocol->second = 0;
-							// }
+							 if(protocol->pCode[x] != protocol->code[x]) {
+								 protocol->repeats = 0;
+								 protocol->first = 0;
+								 protocol->second = 0;
+							}
 						}
 
 						gettimeofday(&tv, NULL);
@@ -548,7 +551,7 @@ void *receive_parse_code(void *param) {
 						}
 
 						/* Reset # of repeats after a certain delay */
-						if(((int)protocol->second-(int)protocol->first) > 500000) {
+						if(((int)protocol->second-(int)protocol->first) > USEC_DELAY_BETWEEN_REPEATS) {
 							protocol->repeats = 0;
 						}
 
