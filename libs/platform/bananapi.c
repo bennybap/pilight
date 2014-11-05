@@ -407,7 +407,7 @@ static int bananapiDigitalRead(int pin) {
 		phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x10; // +0x10 -> data reg
 
 		if(BP_PIN_MASK[bank][i] != -1) {
-			if(pinModes[pin] != INPUT) {
+			if(pinModes[pin] != INPUT && pinModes[pin] != SYS) {
 				logprintf(LOG_ERR, "bananapi->digitalWrite: Trying to write to pin %d, but it's not configured as input", pin);
 				return -1;
 			}
@@ -586,6 +586,13 @@ static int bananapiI2CSetup(int devId) {
 	return fd;
 }
 
+int bananapiValidGPIO(int pin) {
+	if(pinToGpio[pin] != -1) {
+		return 0;
+	}
+	return 1;	
+}
+
 void bananapiInit(void) {
 
 	memset(pinModes, -1, 278);
@@ -606,4 +613,5 @@ void bananapiInit(void) {
 	bananapi->I2CWriteReg16=&bananapiI2CWriteReg16;
 	bananapi->I2CSetup=&bananapiI2CSetup;
 	bananapi->gc=&bananapiGC;
+	bananapi->validGPIO=&bananapiValidGPIO;
 }

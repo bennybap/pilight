@@ -600,7 +600,7 @@ static int radxaDigitalRead(int pin) {
 		return -1;
 	}
 
-	if(pinModes[npin] != INPUT) {
+	if(pinModes[npin] != INPUT && pinModes[npin] != SYS) {
 		logprintf(LOG_ERR, "radxa->digitalRead: Trying to write to pin %d, but it's not configured as input", pin);
 		return -1;
 	}
@@ -772,6 +772,16 @@ static int radxaI2CSetup(int devId) {
 	return fd;
 }
 
+int radxaValidGPIO(int pin) {
+	int i = 0;
+	for(i=0;i<NUM_PINS;i++) {
+		if(validGPIO[i] == pin) {
+			return 0;
+		}
+	}
+	return -1;
+}
+
 void radxaInit(void) {
 
 	memset(pinModes, -1, 128);
@@ -792,4 +802,5 @@ void radxaInit(void) {
 	radxa->I2CWriteReg16=&radxaI2CWriteReg16;
 	radxa->I2CSetup=&radxaI2CSetup;
 	radxa->gc=&radxaGC;
+	radxa->validGPIO=&radxaValidGPIO;
 }

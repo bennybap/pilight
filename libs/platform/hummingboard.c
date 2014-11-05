@@ -155,7 +155,7 @@ static int hummingboardDigitalWrite(int pin, int value) {
 }
 
 static int hummingboardDigitalRead(int pin) {
-	if(pinModes[pin] != INPUT) {
+	if(pinModes[pin] != INPUT && pinModes[pin] != SYS) {
 		logprintf(LOG_ERR, "hummingboard->digitalRead: Trying to write to pin %d, but it's not configured as input", pin);
 		return -1;
 	}
@@ -369,6 +369,13 @@ static int hummingboardI2CSetup(int devId) {
 	return fd;
 }
 
+int hummingboardValidGPIO(int pin) {
+	if(pin >= 0 && pin <= 8) {
+		return 0;
+	}
+	return 1;	
+}
+
 void hummingboardInit(void) {
 
 	memset(pinModes, -1, NUM_PINS);
@@ -389,4 +396,5 @@ void hummingboardInit(void) {
 	hummingboard->I2CWriteReg16=&hummingboardI2CWriteReg16;
 	hummingboard->I2CSetup=&hummingboardI2CSetup;
 	hummingboard->gc=&hummingboardGC;
+	hummingboard->validGPIO=&hummingboardValidGPIO;
 }

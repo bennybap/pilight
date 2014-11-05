@@ -45,17 +45,7 @@ static void arctechSwOldParseBinary(void) {
 	int unit = binToDec(arctech_switch_old->binary, 0, 3);
 	int state = arctech_switch_old->binary[11];
 	int id = binToDec(arctech_switch_old->binary, 4, 8);
-	int counter;
-	for (counter = 0; counter < MAX_ID_NRS; counter += 2) {
-		if (arctech_switch_old->idUnitnrs[counter] == id && arctech_switch_old->idUnitnrs[counter + 1] == unit) {
-			arctechSwOldCreateMessage(id, unit, state);
-			return;	
-		}	
-		if (arctech_switch_old->idUnitnrs[counter]  == -1) {	// end of list reached
-			break;
-		}
-	}
-	arctech_switch_old->message = NULL; // no registered id unit found	
+	arctechSwOldCreateMessage(id, unit, state);
 }
 
 static void arctechSwOldCreateLow(int s, int e) {
@@ -179,6 +169,7 @@ void arctechSwOldInit(void) {
 	protocol_device_add(arctech_switch_old, "byebyestandbye", "Bye Bye Standbye Switches");
 	protocol_device_add(arctech_switch_old, "duwi", "Düwi Terminal Switches");
 	protocol_device_add(arctech_switch_old, "promax", "PRO max Switches");
+	protocol_device_add(arctech_switch_old, "eurodomest", "Eurodomest Switches");
 	protocol_plslen_add(arctech_switch_old, 336);
 	protocol_plslen_add(arctech_switch_old, 326);
 	protocol_plslen_add(arctech_switch_old, 390);
@@ -191,18 +182,7 @@ void arctechSwOldInit(void) {
 	arctech_switch_old->rawlen = 50;
 	arctech_switch_old->binlen = 12;
 	arctech_switch_old->lsb = 2;
-	
-	int counter;	
-	for (counter = 0; counter < MAX_ID_NRS; counter++) {
-		arctech_switch_old->idUnitnrs[counter]	= -1;		
-	}
-	arctech_switch_old->idUnitnrs[0] = 	2;
-	arctech_switch_old->idUnitnrs[1] = 	0;
-	arctech_switch_old->idUnitnrs[2] = 	0;
-	arctech_switch_old->idUnitnrs[3] = 	0;	
-	arctech_switch_old->idUnitnrs[4] = 	1;
-	arctech_switch_old->idUnitnrs[5] = 	0;
-			
+
 	options_add(&arctech_switch_old->options, 't', "on", OPTION_NO_VALUE, CONFIG_STATE, JSON_STRING, NULL, NULL);
 	options_add(&arctech_switch_old->options, 'f', "off", OPTION_NO_VALUE, CONFIG_STATE, JSON_STRING, NULL, NULL);
 	options_add(&arctech_switch_old->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");

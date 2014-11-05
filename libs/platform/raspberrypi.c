@@ -470,7 +470,7 @@ static int setup(void) {
 }
 
 static int raspberrypiDigitalRead(int pin) {
-	if(pinModes[pin] != INPUT) {
+	if(pinModes[pin] != INPUT && pinModes[pin] != SYS) {
 		logprintf(LOG_ERR, "raspberrypi->digitalRead: Trying to write to pin %d, but it's not configured as input", pin);
 		return -1;
 	}
@@ -754,6 +754,13 @@ static int raspberrypiI2CSetup(int devId) {
 	return fd;
 }
 
+int raspberrypiValidGPIO(int pin) {
+	if(pinToGpio[pin] != -1) {
+		return 0;
+	}
+	return 1;	
+}
+
 void raspberrypiInit(void) {
 
 	memset(pinModes, -1, NUM_PINS);
@@ -774,4 +781,5 @@ void raspberrypiInit(void) {
 	raspberrypi->I2CWriteReg16=&raspberrypiI2CWriteReg16;
 	raspberrypi->I2CSetup=&raspberrypiI2CSetup;
 	raspberrypi->gc=&raspberrypiGC;
+	raspberrypi->validGPIO=&raspberrypiValidGPIO;
 }
