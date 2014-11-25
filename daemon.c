@@ -462,6 +462,9 @@ static void receiver_create_message(protocol_t *protocol) {
 			if(protocol->repeats > -1) {
 				json_append_member(jmessage, "repeats", json_mknumber(protocol->repeats));
 			}
+			if (protocol->second) {
+				json_append_member(jmessage, "time", json_mknumber(protocol->second));				
+			}
 			char *output = json_stringify(jmessage, NULL);
 			JsonNode *json = json_decode(output);
 			broadcast_queue(protocol->id, json);
@@ -476,7 +479,7 @@ static void receiver_create_message(protocol_t *protocol) {
 }
 
 
-#define USEC_DELAY_BETWEEN_REPEATS	750000 // 750000 usec was 500000
+#define DELAY_BETWEEN_REPEATS	1 // was 500000 usec
 
 void *receive_parse_code(void *param) {
 
@@ -545,13 +548,14 @@ void *receive_parse_code(void *param) {
 						if(protocol->first > 0) {
 							protocol->first = protocol->second;
 						}
-						protocol->second = 1000000 * (unsigned int)tv.tv_sec + (unsigned int)tv.tv_usec;
+//						protocol->second = 1000000 * (unsigned int)tv.tv_sec + (unsigned int)tv.tv_usec;
+						protocol->second = (unsigned int)tv.tv_sec;
 						if(protocol->first == 0) {
 							protocol->first = protocol->second;
 						}
 
 						/* Reset # of repeats after a certain delay */
-						if(((int)protocol->second-(int)protocol->first) > USEC_DELAY_BETWEEN_REPEATS) {
+						if((protocol->second - protocol->first) >= DELAY_BETWEEN_REPEATS) {
 							protocol->repeats = 0;
 						}
 

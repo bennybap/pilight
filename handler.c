@@ -282,12 +282,10 @@ int main(int argc, char **argv) {
 				while(line) {
 					int id = -1;
 					int unit = -1;
-//					int repeats = -1;
 					struct JsonNode *code;
 					char *state = NULL;
 					char *uid = NULL;
-					char *origin = NULL;
-					char *protocol = NULL;
+//					char *origin = NULL;
 					struct timeval tp;
 					struct tm *tm;							
 					int index1; 
@@ -303,22 +301,23 @@ int main(int argc, char **argv) {
 									if(json_find_string(json, "uuid", &uid) == 0) {
 										;
 									}
-									json_find_string(json, "origin", &origin);
-									if (strcmp(origin, "sender") == 0)
-									{
-										json_find_number(json, "repeat", &itmp);
+//									json_find_string(json, "origin", &origin);
+//									if (strcmp(origin, "sender") == 0)
+//									{
+//										json_find_number(json, "repeat", &itmp);
 //										repeats = (int)round(itmp);
-									}	
-									else {
-										json_find_number(json, "repeats", &itmp);	
+//									}	
+//									else {
+//										json_find_number(json, "repeats", &itmp);	
 //										repeats = (int)round(itmp);										
-									}
-									json_find_string(json, "protocol", &protocol);	
-
+//									}
+//									json_find_string(json, "protocol", &protocol);	
+									json_find_number(json, "time", &itmp);
+									tp.tv_sec = (long int)round(itmp);
 									for (index1 = 0; index1 < MAXKAKUDEVS; index1++)
 									{
 										if (table[index1].id == id && 	table[index1].unit == unit) {
-											gettimeofday(&tp, NULL);												
+//											gettimeofday(&tp, NULL);												
 											break;
 										}
 									}
