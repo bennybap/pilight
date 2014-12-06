@@ -51,8 +51,17 @@ static void arctechMotionParseBinary(void) {
 	int state = arctech_motion->binary[27];
 	int all = arctech_motion->binary[26];
 	int id = binToDecRev(arctech_motion->binary, 0, 25);
-
-	arctechMotionCreateMessage(id, unit, state, all);
+	int counter;
+	for (counter = 0; counter < MAX_ID_NRS; counter += 2) {
+		if (arctech_motion->idUnitnrs[counter] == id && arctech_motion->idUnitnrs[counter + 1] == unit) {
+			arctechMotionCreateMessage(id, unit, state, all);
+			return;	
+		}
+		if (arctech_motion->idUnitnrs[counter]  == -1) {	// end of list reached
+			break;
+		}	
+	}
+	arctech_motion->message = NULL; // no registered id unit found
 }
 
 #ifndef MODULE
@@ -70,6 +79,15 @@ void arctechMotionInit(void) {
 	arctech_motion->pulse = 4;
 	arctech_motion->rawlen = 132;
 	arctech_motion->lsb = 3;
+
+	int counter;	
+	for (counter = 0; counter < MAX_ID_NRS; counter++) {
+		motion_sensor->idUnitnrs[counter]	= -1;		
+	}
+	arctech_motion->idUnitnrs[0] = 9943962;
+	arctech_motion->idUnitnrs[1] = 9;
+	arctech_motion->idUnitnrs[2] = 9541494;
+	arctech_motion->idUnitnrs[3] = 9;	
 
 	options_add(&arctech_motion->options, 'u', "unit", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1}|[1][0-5])$");
 	options_add(&arctech_motion->options, 'i', "id", OPTION_HAS_VALUE, CONFIG_ID, JSON_NUMBER, NULL, "^([0-9]{1,7}|[1-5][0-9]{7}|6([0-6][0-9]{6}|7(0[0-9]{5}|10([0-7][0-9]{3}|8([0-7][0-9]{2}|8([0-5][0-9]|6[0-3]))))))$");
