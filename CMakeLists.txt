@@ -219,10 +219,6 @@ if(${PROTOCOL_KAKU_DUSK} MATCHES "OFF")
   list(REMOVE_ITEM protocol "${PROJECT_SOURCE_DIR}/libs/protocols/arctech_dusk.c")
 endif()
 
-if(${PROTOCOL_MOTION_SENSOR} MATCHES "OFF")
-  list(REMOVE_ITEM protocol_headers "${PROJECT_SOURCE_DIR}/libs/protocols/motion_sensor.h")
-  list(REMOVE_ITEM protocol "${PROJECT_SOURCE_DIR}/libs/protocols/motion_sensor.c")
-endif()
 
 if(${PROTOCOL_COCO_SWITCH} MATCHES "OFF"
 	AND ${PROTOCOL_DIO_SWITCH} MATCHES "OFF"

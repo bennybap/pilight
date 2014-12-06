@@ -1,4 +1,4 @@
-set(WEBSERVER ON CACHE BOOL "enable the built-in webserver")
+﻿set(WEBSERVER ON CACHE BOOL "enable the built-in webserver")
 set(UPDATE ON CACHE BOOL "enable the built-in update checker")
 set(FIRMWARE ON CACHE BOOL "auto update the pilight firmware")
 set(PROTOCOL_ALECTO_WS1700 ON CACHE BOOL "support for the Alecto WS1700 protocol")
@@ -44,7 +44,6 @@ set(PROTOCOL_KAKU_SWITCH ON CACHE BOOL "support for the new KlikAanKlikUit switc
 set(PROTOCOL_KAKU_SCREEN ON CACHE BOOL "support for the new KlikAanKlikUit screen protocol")
 set(PROTOCOL_KAKU_CONTACT ON CACHE BOOL "support for the new KlikAanKlikUit contact protocol")
 set(PROTOCOL_KAKU_DUSK ON CACHE BOOL "support for the new KlikAanKlikUit dusk / dawn protocol")
-set(PROTOCOL_MOTION_SENSOR ON CACHE BOOL "support for the KlikAanKlikUit motion sensor protocol")
 set(PROTOCOL_LM75 ON CACHE BOOL "support for the lm75 i2c temperature sensor")
 set(PROTOCOL_LM76 ON CACHE BOOL "support for the lm76 i2c temperature sensor")
 set(PROTOCOL_LIRC ON CACHE BOOL "support for the Lirc API")
